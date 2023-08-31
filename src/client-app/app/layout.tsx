@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Josefin_Sans } from 'next/font/google'
-import Footer from "@/components/footer";
+import Footer from "@/lib/components/footer";
 
 const josefinSans = Josefin_Sans({ subsets: ['latin'] })
 
