@@ -1,0 +1,21 @@
+
+.footer {
+    display: flex;
+    width: 100%;
+    margin-top: auto;
+}
+
+.question {
+    margin: 0 2rem 2rem auto;
+    background: #89CADF;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    line-height: 2.8rem;
+    font-size: 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    //display: flex;
+    //align-items: center;
+    //justify-content: center;
+}
