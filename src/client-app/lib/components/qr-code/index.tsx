@@ -1,21 +1,17 @@
-'use client';
 import QRCode from 'qrcode';
-import {useEffect, useRef, useState} from "react";
 import styles from './qr-code.module.scss';
-import QrCodeSkeleton from "@/lib/components/qr-code/QrCodeSkeleton";
+import { headers } from 'next/headers'
+import Image from "next/image";
 
-export default function QrCode({token}: { token: string }) {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [isReady, setReady] = useState<boolean>(false);
-    useEffect(() => {
-        const url = new URL(`/api/follow/stamp?token=${token}`, window.location.href);
-        QRCode.toCanvas(canvasRef.current, url.href, {width: 300}).then(() => {
-            setReady(true)
-        });
-    }, [token]);
+export default async function QrCode({token}: { token: string }) {
+    const dataUrl = await QRCode.toDataURL(getUrl(token), {width: 300});
 
     return <div className={styles.qr}>
-        <canvas ref={canvasRef} style={{display: isReady ? "initial" : "none"}}/>
-        {!isReady && <QrCodeSkeleton/>}
+        <Image src={dataUrl} alt="QR code" width={300} height={300}/>
     </div>
+}
+
+function getUrl(token: string): string {
+    const host = headers().get('host');
+    return new URL(`/api/follow/stamp?token=${token}`, `https://${host}`).href;
 }
