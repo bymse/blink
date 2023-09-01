@@ -1,9 +1,11 @@
 import QRCode from 'qrcode';
-import styles from './qr-code.module.scss';
+import styles from './follow-qr-code.module.scss';
 import { headers } from 'next/headers'
 import Image from "next/image";
+import ApiClient from "@/lib/api/apiClient";
 
-export default async function QrCode({token}: { token: string }) {
+export default async function FollowQrCode() {
+    const token = await ApiClient.getToken();
     const dataUrl = await QRCode.toDataURL(getUrl(token), {width: 300});
 
     return <div className={styles.qr}>
