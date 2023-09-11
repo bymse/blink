@@ -27,15 +27,15 @@ class Storage:
     def find(self, connection_id: str) -> Connection | None:
         key = _key(connection_id)
         connection = self._redis.hgetall(key)
-        if connection:
+        if not connection or len(connection) == 0:
             return None
 
         expires = self._redis.ttl(key)
         return Connection(
             connection_id=connection_id,
             expires_unix_ts=expires,
-            state=connection['state'],
-            url=connection['url']
+            state=ConnectionState(int(connection[b'state'])),
+            url=str(connection[b'url'])
         )
 
 
