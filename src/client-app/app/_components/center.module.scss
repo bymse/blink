@@ -1,0 +1,12 @@
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 1rem;
+  
+  & h3 {
+    font-weight: normal;
+  }
+}
