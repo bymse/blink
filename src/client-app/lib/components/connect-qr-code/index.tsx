@@ -1,5 +1,5 @@
 import QRCode from 'qrcode';
-import styles from './follow-qr-code.module.scss';
+import styles from './connect-qr-code.module.scss';
 import { headers } from 'next/headers'
 import Image from "next/image";
 import ApiClient from "@/lib/api/apiClient";
