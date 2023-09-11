@@ -1,9 +1,9 @@
 import time
 import uuid
-from enum import Enum
+from enum import IntEnum
 
 
-class ConnectionState(Enum):
+class ConnectionState(IntEnum):
     CREATED = 1
     ACTIVATED = 2
     SUBMITTED = 3

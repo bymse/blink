@@ -35,7 +35,7 @@ def get_context(
 
 @app.post("/api/connect/create")
 def create(storage: Annotated[Storage, Depends(get_storage)]):
-    connection = Connection.create(config.config.connection_ttl_seconds)
+    connection = Connection.create(config.connection_ttl_seconds)
     storage.save(connection)
 
     ses = session.Session(connection_id=connection.connection_id, role=session.Role.TARGET)

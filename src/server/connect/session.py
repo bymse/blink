@@ -6,7 +6,7 @@ import jwt
 from server.config import config
 
 
-class Role(enum.Enum):
+class Role(enum.IntEnum):
     TARGET = 1,
     SOURCE = 2
 
@@ -25,17 +25,18 @@ def issue_jwt(session: Session, expires: int) -> str:
         "sub": session.connection_id,
         "issuer": _issuer,
         "exp": expires,
-        "role": session.role
+        "role": int(session.role)
     }
-    return jwt.encode(payload, config.rsa_private_key, algorithm=["RS256"])
+    key = bytes(config.rsa_private_key, encoding="utf-8")
+    return jwt.encode(payload, key, algorithm="RS256")
 
 
 def parse_jwt(token: str) -> Session | None:
     try:
-        payload = jwt.decode(token, config.rsa_public_key, algorithms=["RS256"])
+        payload = jwt.decode(token, config.rsa_public_key, algorithms="RS256")
         return Session(
             connection_id=payload['sub'],
-            role=payload['role']
+            role=Role(int(['role']))
         )
     except jwt.exceptions.PyJWTError:
         return None
