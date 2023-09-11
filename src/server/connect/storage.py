@@ -1,7 +1,7 @@
 import redis
 import server.config as config
 
-from connection import Connection
+from connection import Connection, ConnectionState
 
 
 def create_redis_pool():
@@ -20,7 +20,9 @@ class Storage:
             'state': connection.state,
             'url': connection.url
         })
-        self._redis.expire(_key(connection.connection_id), config.config.connection_ttl_seconds)
+
+        if connection.state == ConnectionState.CREATED:
+            self._redis.expire(_key(connection.connection_id), config.config.connection_ttl_seconds)
 
     def find(self, connection_id: str) -> Connection | None:
         key = _key(connection_id)
