@@ -3,7 +3,7 @@ from typing import Annotated, Tuple
 from fastapi import FastAPI, Depends, Header, HTTPException
 
 from server.config import config
-from server.connect.connection import Connection
+from server.connect.connection import Connection, ConnectionState
 from server.connect.storage import Storage
 import server.connect.session as session
 
@@ -53,6 +53,9 @@ def activate(
     connection = storage.find(connection_id)
     if not connection:
         raise HTTPException(status_code=404)
+
+    if connection.state != ConnectionState.CREATED or connection.state != ConnectionState.ACTIVATED:
+        raise HTTPException(status_code=400)
 
     connection.activate()
     storage.save(connection)
