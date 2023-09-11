@@ -20,14 +20,21 @@ class Storage:
             'state': connection.state,
             'url': connection.url
         })
-        self.redis.expire(_key(connection.connection_id), config.config.session_ttl_seconds)
+        self.redis.expire(_key(connection.connection_id), config.config.connection_ttl_seconds)
 
     def find(self, connection_id: str) -> Connection | None:
-        connection = self.redis.hgetall(_key(connection_id))
+        key = _key(connection_id)
+        connection = self.redis.hgetall(key)
         if connection:
             return None
 
-        return Connection(connection_id=connection_id, state=connection['state'], url=connection['url'])
+        expires = self.redis.ttl(key)
+        return Connection(
+            connection_id=connection_id,
+            expires_unix_ts=expires,
+            state=connection['state'],
+            url=connection['url']
+        )
 
 
 def _key(connection_id: str) -> str:
