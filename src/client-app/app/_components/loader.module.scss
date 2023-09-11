@@ -7,45 +7,40 @@
 
 .Loader {
     display: flex;
-    gap: 15px;
+    gap: 0.8rem;
 }
 
 .LoaderBullet {
     width: 26px;
     height: 26px;
     border-radius: 50px;
-    border: 1px solid #000;
-    animation: 2s infinite normal load;
+    border: 1px solid unset;
+    animation: 2.1s infinite normal load;
+    background:  #ebebeb;
 
-    &:nth-child(1) {
-        //background: #000;
-    }
-    
     &:nth-child(2) {
-        //background: #f7f7f7;
         animation-delay: 0.7s;
     }
-
+    
     &:nth-child(3) {
-        //background: #ebebeb;
-        animation-delay: 1.2s;
+        animation-delay: 1.4s;
     }
 }
 
 @keyframes load {
     0% {
-        background: #fff;
+        background: #ebebeb;
     }
-    
+
     10% {
         background: #000;
     }
-    
+
     20% {
         background: #000;
     }
-    
+
     100% {
-        background: #fff;
+        background: #ebebeb;
     }
 }

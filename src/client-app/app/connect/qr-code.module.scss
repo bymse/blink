@@ -1,4 +1,8 @@
 .qr {
     border: 1px solid black;
     display: flex;
+    
+    &, & img {
+        border-radius: 6%;
+    }
 }
