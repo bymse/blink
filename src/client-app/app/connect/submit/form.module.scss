@@ -1,0 +1,32 @@
+
+.Container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    align-items: center;
+    width: 100%;
+}
+
+.Title {
+    font-weight: normal;
+}
+
+.Input {
+    border: none;
+    border-bottom: 1px solid #000;
+    padding: 6px 2px;
+    font-size: 1.3rem;
+    font-family: inherit;
+    font-weight: normal;
+    width: 75%;
+    max-width: 350px;
+    text-align: center;
+    
+    &:active, &:focus {
+        outline: none;
+    }
+    
+    &::placeholder {
+        color: #CBCBCB;
+    }
+}
