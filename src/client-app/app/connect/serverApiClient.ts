@@ -8,7 +8,7 @@ interface ICreateResponse extends ITokenResponse {
     connection_id: string
 }
 
-interface IApiClient {
+interface IServerApiClient {
     create(): Promise<ICreateResponse>
 
     activate(connection_id: string): Promise<ITokenResponse>,
@@ -16,7 +16,7 @@ interface IApiClient {
     submit(token: string, url: string): Promise<void>
 }
 
-const client: IApiClient = {
+const client: IServerApiClient = {
     activate(connection_id: string): Promise<ITokenResponse> {
         return send<ITokenResponse>(`/api/connect/activate?connection_id=${connection_id}`, 'POST');
     },
@@ -24,7 +24,7 @@ const client: IApiClient = {
         return send<ICreateResponse>('/api/connect/create', 'POST');
     },
     submit(token: string, url: string): Promise<void> {
-        return send<void>('api/connect/submit', 'POST', token, {url});
+        return send<void>('/api/connect/submit', 'POST', token, {url});
     }
 }
 

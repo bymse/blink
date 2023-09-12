@@ -1,5 +1,5 @@
 import QrCode from "@/app/connect/qr-code";
-import ApiClient from "@/app/connect/apiClient";
+import ApiClient from "@/app/connect/serverApiClient";
 import Center from "@/app/_components/center";
 
 

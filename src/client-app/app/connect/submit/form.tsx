@@ -1,16 +1,16 @@
 "use client"
 import {FormEventHandler, useState} from "react";
 import styles from "./form.module.scss";
-import ApiClient from "@/app/connect/apiClient";
 import cn from "classnames"
+import ServerApiClient from "@/app/connect/serverApiClient";
 
 export default function Form({token}: { token: string }) {
     const [url, setUrl] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-        setIsLoading(true)
+        setIsLoading(true);
         event.preventDefault();
-        ApiClient
+        ServerApiClient
             .submit(token, url)
             .finally(() => setIsLoading(false));
     }
@@ -18,10 +18,10 @@ export default function Form({token}: { token: string }) {
     return (
         <form className={styles.Container} onSubmit={onSubmit}>
             <h2 className={styles.Title}>Enter the link:</h2>
-            <input 
+            <input
                 type="url"
                 value={url}
-                onChange={e => setUrl(e.target.value)} 
+                onChange={e => setUrl(e.target.value)}
                 placeholder="https://example.com"
                 className={cn(styles.Input, isLoading && styles.Loading)}
                 required

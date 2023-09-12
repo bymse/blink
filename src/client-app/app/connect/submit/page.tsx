@@ -1,7 +1,6 @@
-import Loader from "@/app/_components/loader";
-import {redirect, useSearchParams} from "next/navigation";
+import {redirect} from "next/navigation";
 import RemoveQuery from "@/app/connect/submit/remove-query";
-import ApiClient from "@/app/connect/apiClient";
+import ApiClient from "@/app/connect/serverApiClient";
 import React from "react";
 import Center from "@/app/_components/center";
 import Form from "@/app/connect/submit/form";

@@ -29,18 +29,21 @@
     &::placeholder {
         color: #CBCBCB;
     }
-    
+
 }
 
 .Loading {
-    border-bottom-color: #dddddd;
+    color: #acacac;
+    border-bottom-color: #acacac;
     //noinspection CssInvalidFunction
     background: linear-gradient(
                     to right,
-                    #fff 0% 45%,
-                    #ededed 50%,
-                    #fff 55% 100%
-    );
+                    #acacac 0% 45%,
+                    #fff 50%,
+                    #acacac 55% 100%);
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; 
     background-size: 200% 100%;
     animation: loading-animation 2s linear infinite;
 }

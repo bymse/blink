@@ -56,7 +56,7 @@ def activate(
     if not connection:
         raise HTTPException(status_code=404)
 
-    if connection.state != ConnectionState.CREATED or connection.state != ConnectionState.ACTIVATED:
+    if connection.state != ConnectionState.CREATED and connection.state != ConnectionState.ACTIVATED:
         raise HTTPException(status_code=400)
 
     connection.activate()
