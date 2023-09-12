@@ -18,15 +18,38 @@
     font-size: 1.3rem;
     font-family: inherit;
     font-weight: normal;
-    width: 75%;
-    max-width: 350px;
+    width: 90%;
+    max-width: 400px;
     text-align: center;
-    
+
     &:active, &:focus {
         outline: none;
     }
-    
+
     &::placeholder {
         color: #CBCBCB;
+    }
+    
+}
+
+.Loading {
+    border-bottom-color: #dddddd;
+    //noinspection CssInvalidFunction
+    background: linear-gradient(
+                    to right,
+                    #fff 0% 45%,
+                    #ededed 50%,
+                    #fff 55% 100%
+    );
+    background-size: 200% 100%;
+    animation: loading-animation 2s linear infinite;
+}
+
+@keyframes loading-animation {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
     }
 }
