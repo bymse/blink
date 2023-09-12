@@ -31,7 +31,7 @@ class Config:
     @property
     def rsa_public_key(self) -> str:
         if self._rsa_public_key is not None:
-            return self._rsa_private_key
+            return self._rsa_public_key
         self._rsa_public_key = self._get_from_file('rsa', 'public_key_path')
         return self._rsa_public_key
 

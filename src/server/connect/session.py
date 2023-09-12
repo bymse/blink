@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 import enum
 import jwt
@@ -20,11 +21,11 @@ class Session:
     role: Role
 
 
-def issue_jwt(session: Session, expires: int) -> str:
+def issue_jwt(session: Session, ttl_seconds: int) -> str:
     payload = {
         "sub": session.connection_id,
         "issuer": _issuer,
-        "exp": expires,
+        "exp": int(time.time()) + ttl_seconds,
         "role": int(session.role)
     }
     key = bytes(config.rsa_private_key, encoding="utf-8")
@@ -36,7 +37,7 @@ def parse_jwt(token: str) -> Session | None:
         payload = jwt.decode(token, config.rsa_public_key, algorithms="RS256")
         return Session(
             connection_id=payload['sub'],
-            role=Role(int(['role']))
+            role=Role(int(payload['role']))
         )
-    except jwt.exceptions.PyJWTError:
+    except jwt.exceptions.PyJWTError as e:
         return None

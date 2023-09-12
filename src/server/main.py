@@ -42,7 +42,7 @@ def create(storage: Annotated[Storage, Depends(get_storage)]):
 
     ses = session.Session(connection_id=connection.connection_id, role=session.Role.TARGET)
     return {
-        "token": session.issue_jwt(ses, connection.expires_unix_ts),
+        "token": session.issue_jwt(ses, connection.ttl_seconds),
         "connection_id": connection.connection_id
     }
 
@@ -64,7 +64,7 @@ def activate(
 
     ses = session.Session(connection_id=connection_id, role=session.Role.SOURCE)
     return {
-        "token": session.issue_jwt(ses, connection.expires_unix_ts)
+        "token": session.issue_jwt(ses, connection.ttl_seconds)
     }
 
 

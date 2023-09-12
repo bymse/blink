@@ -15,22 +15,21 @@ class Connection:
     connection_id: str
     state: ConnectionState
     url: str
-    expires_unix_ts: int
+    ttl_seconds: int
 
     def __init__(self, connection_id: str,
-                 expires_unix_ts: int,
+                 ttl_seconds: int,
                  state: ConnectionState = ConnectionState.CREATED,
                  url: str = None
                  ):
         self.connection_id = connection_id
         self.state = state
         self.url = url
-        self.expires_unix_ts = expires_unix_ts
+        self.ttl_seconds = ttl_seconds
 
     @staticmethod
-    def create(ttl_second: int):
-        expires = int(time.time()) + ttl_second
-        return Connection(connection_id=uuid.uuid4().hex, expires_unix_ts=expires)
+    def create(ttl_seconds: int):
+        return Connection(connection_id=uuid.uuid4().hex, ttl_seconds=ttl_seconds)
 
     def activate(self):
         self.state = ConnectionState.ACTIVATED

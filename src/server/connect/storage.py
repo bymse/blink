@@ -1,3 +1,5 @@
+from time import time
+
 import redis
 from server.config import config
 
@@ -22,7 +24,7 @@ class Storage:
         })
 
         if connection.state == ConnectionState.CREATED:
-            self._redis.expire(_key(connection.connection_id), config.connection_ttl_seconds)
+            self._redis.expire(_key(connection.connection_id), connection.ttl_seconds)
 
     def find(self, connection_id: str) -> Connection | None:
         key = _key(connection_id)
@@ -33,7 +35,7 @@ class Storage:
         expires = self._redis.ttl(key)
         return Connection(
             connection_id=connection_id,
-            expires_unix_ts=expires,
+            ttl_seconds=expires,
             state=ConnectionState(int(connection[b'state'])),
             url=str(connection[b'url'])
         )
