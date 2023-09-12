@@ -1,6 +1,7 @@
 from typing import Annotated, Tuple
 
 from fastapi import FastAPI, Depends, Header, HTTPException
+from pydantic import BaseModel, Field
 
 from server.config import config
 from server.connect.connection import Connection, ConnectionState
@@ -15,13 +16,14 @@ def get_storage():
 
 
 def get_context(
-        header: Annotated[str | None, Header("Authorization")],
-        storage: Annotated[Storage, Depends(get_storage)]):
+        storage: Annotated[Storage, Depends(get_storage)],
+        authorization: Annotated[str | None, Header()] = None,
+):
     error = HTTPException(status_code=401)
-    if not header:
+    if not authorization:
         raise error
 
-    token = header.split(" ")[1]
+    token = authorization.split(" ")[1]
     ses = session.parse_jwt(token)
     if not ses:
         raise error
@@ -64,3 +66,23 @@ def activate(
     return {
         "token": session.issue_jwt(ses, connection.expires_unix_ts)
     }
+
+
+class Submit(BaseModel):
+    url: str = Field(max_length=300)
+
+
+@app.post("/api/connect/submit")
+def submit(
+        request: Submit,
+        storage: Annotated[Storage, Depends(get_storage)],
+        context: Annotated[Tuple[session.Session, Connection], Depends(get_context)]
+):
+    ses, connection = context
+    if connection.state != ConnectionState.ACTIVATED:
+        raise HTTPException(status_code=400)
+
+    connection.submit(request.url)
+    storage.save(connection)
+
+    return {}
