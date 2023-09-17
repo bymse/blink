@@ -18,13 +18,16 @@ class Storage:
         self._redis = redis.Redis(connection_pool=redis_pool)
 
     def save(self, connection: Connection) -> None:
-        self._redis.hset(_key(connection.connection_id), mapping={
+        key = _key(connection.connection_id)
+        self._redis.hset(key, mapping={
             'state': int(connection.state),
             'url': str(connection.url)
         })
 
         if connection.state == ConnectionState.CREATED:
-            self._redis.expire(_key(connection.connection_id), connection.ttl_seconds)
+            self._redis.expire(key, connection.ttl_seconds)
+
+        self._redis.publish(key, int(connection.state))
 
     def find(self, connection_id: str) -> Connection | None:
         key = _key(connection_id)
