@@ -1,6 +1,7 @@
 from typing import Annotated, Tuple
 
 from fastapi import FastAPI, Depends, Header, HTTPException
+from fastapi.websockets import WebSocketState, WebSocket
 from pydantic import BaseModel, Field
 
 from server.config import config
@@ -15,7 +16,7 @@ def get_storage():
     return Storage()
 
 
-def get_context(
+async def get_context(
         storage: Annotated[Storage, Depends(get_storage)],
         authorization: Annotated[str | None, Header()] = None,
 ):
@@ -28,7 +29,7 @@ def get_context(
     if not ses:
         raise error
 
-    connection = storage.find(ses.connection_id)
+    connection = await storage.find(ses.connection_id)
     if not connection:
         raise HTTPException(status_code=404)
 
@@ -48,11 +49,11 @@ def create(storage: Annotated[Storage, Depends(get_storage)]):
 
 
 @app.post("/api/connect/activate")
-def activate(
+async def activate(
         connection_id: str,
         storage: Annotated[Storage, Depends(get_storage)]
 ):
-    connection = storage.find(connection_id)
+    connection = await storage.find(connection_id)
     if not connection:
         raise HTTPException(status_code=404)
 
@@ -60,7 +61,7 @@ def activate(
         raise HTTPException(status_code=400)
 
     connection.activate()
-    storage.save(connection)
+    await storage.save(connection)
 
     ses = session.Session(connection_id=connection_id, role=session.Role.SOURCE)
     return {
@@ -94,16 +95,19 @@ class Submit(BaseModel):
 
 
 @app.post("/api/connect/submit")
-def submit(
+async def submit(
         request: Submit,
         storage: Annotated[Storage, Depends(get_storage)],
         context: Annotated[Tuple[session.Session, Connection], Depends(get_context)]
 ):
     ses, connection = context
+    if ses.role != session.Role.SOURCE:
+        raise HTTPException(status_code=403)
+    
     if connection.state != ConnectionState.ACTIVATED:
         raise HTTPException(status_code=400)
 
     connection.submit(request.url)
-    storage.save(connection)
+    await storage.save(connection)
 
     return {}

@@ -1,6 +1,7 @@
-from time import time
+from collections.abc import AsyncIterator
 
-import redis
+import redis.asyncio as redis
+
 from server.config import config
 
 from server.connect.connection import Connection, ConnectionState
@@ -20,25 +21,25 @@ class Storage:
     def __init__(self):
         self._redis = redis.Redis(connection_pool=redis_pool)
 
-    def save(self, connection: Connection) -> None:
+    async def save(self, connection: Connection) -> None:
         key = _key(connection.connection_id)
-        self._redis.hset(key, mapping={
+        await self._redis.hset(key, mapping={
             'state': int(connection.state),
             'url': str(connection.url)
         })
 
         if connection.state == ConnectionState.CREATED:
-            self._redis.expire(key, connection.ttl_seconds)
+            await self._redis.expire(key, connection.ttl_seconds)
 
-        self._redis.publish(key, int(connection.state))
+        await self._redis.publish(key, int(connection.state))
 
-    def find(self, connection_id: str) -> Connection | None:
+    async def find(self, connection_id: str) -> Connection | None:
         key = _key(connection_id)
-        connection = self._redis.hgetall(key)
+        connection = await self._redis.hgetall(key)
         if not connection or len(connection) == 0:
             return None
 
-        expires = self._redis.ttl(key)
+        expires = await self._redis.ttl(key)
         return Connection(
             connection_id=connection_id,
             ttl_seconds=expires,
