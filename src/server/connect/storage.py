@@ -14,6 +14,9 @@ redis_pool = create_redis_pool()
 
 
 class Storage:
+    _pubsub: redis.client.PubSub | None
+    _redis: redis.Redis
+
     def __init__(self):
         self._redis = redis.Redis(connection_pool=redis_pool)
 
@@ -42,6 +45,18 @@ class Storage:
             state=ConnectionState(int(connection[b'state'])),
             url=str(connection[b'url'])
         )
+
+    async def listen(self, connection_id: str) -> AsyncIterator[Connection]:
+        key = _key(connection_id)
+        self._pubsub = self._redis.pubsub()
+        await self._pubsub.subscribe(key)
+        async for message in self._pubsub.listen():
+            if message['type'] == 'message':
+                yield self.find(connection_id)
+
+    async def close_listen(self):
+        if self._pubsub:
+            await self._pubsub.close()
 
 
 def _key(connection_id: str) -> str:

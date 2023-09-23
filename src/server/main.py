@@ -68,6 +68,27 @@ def activate(
     }
 
 
+@app.websocket("/api/connect/ws/listen")
+async def listen(websocket: WebSocket,
+                 context: Annotated[Tuple[session.Session, Connection], Depends(get_context)],
+                 storage: Annotated[Storage, Depends(get_storage)]):
+    ses, connection = context
+    if ses.role != session.Role.TARGET:
+        raise HTTPException(status_code=403)
+
+    await websocket.accept()
+    try:
+        async for updated_connection in storage.listen(connection.connection_id):
+            if websocket.client_state != WebSocketState.CONNECTED:
+                break
+            await websocket.send_json({
+                "state": updated_connection.state,
+                "url": updated_connection.url
+            })
+    finally:
+        await storage.close_listen()
+
+
 class Submit(BaseModel):
     url: str = Field(max_length=300)
 
