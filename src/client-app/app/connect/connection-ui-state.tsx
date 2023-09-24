@@ -21,7 +21,7 @@ export default function ConnectionUiState({token, children}: { token: string, ch
         <>
             {state === ConnectionState.CREATED && children}
             {state === ConnectionState.ACTIVATED && <Loader title="Waiting for the link..."/>}
-            {state == ConnectionState.SUBMITTED && <LinkPrompt url={url} token={token}/>}
+            {(state == ConnectionState.SUBMITTED || state == ConnectionState.DECLINED) && <LinkPrompt url={url} token={token}/>}
         </>
     )
 }
