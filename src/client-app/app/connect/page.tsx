@@ -7,10 +7,8 @@ import ConnectionUiState from "@/app/connect/connection-ui-state";
 export default async function Connect() {
     const {token, connection_id} = await ApiClient.create();
     return (
-        <Center>
-            <ConnectionUiState token={token}>
-                <QrCode connectionId={connection_id}/>
-            </ConnectionUiState>
-        </Center>
+        <ConnectionUiState token={token}>
+            <QrCode connectionId={connection_id}/>
+        </ConnectionUiState>
     )
 }
