@@ -1,4 +1,4 @@
 
 export const setAuthorizationCookie = (token: string) => { 
-    document.cookie = `authorize=${token}; path=/`;
+    document.cookie = `authorization=${token}; path=/`;
 }

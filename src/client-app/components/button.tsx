@@ -14,8 +14,9 @@ export default function Button(
         mode = "primary",
         type = "button",
         children,
+        onClick
     }: IButtonProps) {
-    return <button type={type} className={cn({
+    return <button onClick={onClick} type={type} className={cn({
         [styles.Button]: true,
         [styles.Primary]: mode === "primary",
         [styles.Secondary]: mode === "secondary",
