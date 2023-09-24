@@ -8,7 +8,10 @@ export default async function Submit({searchParams}: { searchParams: { connectio
     if (!searchParams.connection_id) {
         redirect("/");
     }
-    const {token} = await ApiClient.activate(searchParams.connection_id);
+    const {token} = await ApiClient
+        .activate(searchParams.connection_id)
+        .catch(() => ({token: null}));
+    
     return (
         <Center>
             {token
