@@ -1,4 +1,4 @@
-export class WebSocketClient<T> {
+export default class WebSocketClient<T> {
     private socket: WebSocket | null = null;
     private reconnectInterval: number = 1000;
     private maxReconnectAttempts: number = 10;
@@ -6,11 +6,12 @@ export class WebSocketClient<T> {
 
     constructor(
         private readonly url: string,
+        token: string,
         private readonly onMessage: (message: T) => void) {
-        this.connect();
+        window.document.cookie = `X-Authorization=${token}};path=${url}`;
     }
 
-    private connect() {
+    public connect() {
         this.socket = new WebSocket(this.url);
 
         this.socket.addEventListener('open', () => {

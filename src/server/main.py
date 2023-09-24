@@ -69,7 +69,7 @@ async def activate(
     }
 
 
-@app.websocket("/api/connect/ws/listen")
+@app.websocket("/ws-api/connect/listen")
 async def listen(websocket: WebSocket,
                  context: Annotated[Tuple[session.Session, Connection], Depends(get_context)],
                  storage: Annotated[Storage, Depends(get_storage)]):
@@ -103,7 +103,7 @@ async def submit(
     ses, connection = context
     if ses.role != session.Role.SOURCE:
         raise HTTPException(status_code=403)
-    
+
     if connection.state != ConnectionState.ACTIVATED:
         raise HTTPException(status_code=400)
 
