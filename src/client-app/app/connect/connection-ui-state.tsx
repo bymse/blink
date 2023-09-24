@@ -2,6 +2,7 @@
 import {useEffect, useState} from "react";
 import ConnectionState from "@/lib/connectionState";
 import WsApiClient, {IListenMessage} from "@/lib/wsApiClient";
+import Loader from "@/components/loader";
 
 export default function ConnectionUiState({token}: { token: string }) {
     const [state, setState] = useState<ConnectionState>(ConnectionState.CREATED);
@@ -19,7 +20,11 @@ export default function ConnectionUiState({token}: { token: string }) {
         WsApiClient.listen(token, onMessage);
     }, [token]);
     
-    return <></>
+    return (
+        <>
+            {state === ConnectionState.ACTIVATED && <Loader title="Waiting for the link..."/>}
+        </>
+    )
 }
 
 function hideQrCode() {
