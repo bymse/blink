@@ -5,30 +5,53 @@ import cn from "classnames"
 import ApiClient from "@/lib/httpApiClient";
 import Input from "@/components/input";
 
+enum Status {
+    Idle,
+    Loading,
+    Success,
+    Error
+}
+
 export default function Form({token}: { token: string }) {
     const [url, setUrl] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    const [status, setStatus] = useState(Status.Idle);
     const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-        setIsLoading(true);
+        setStatus(Status.Loading);
         event.preventDefault();
         ApiClient
             .submit(token, url)
-            .finally(() => setIsLoading(false));
+            .then(() => setStatus(Status.Success))
+            .catch((e) => {
+                console.error(e);
+                setStatus(Status.Error);
+            });
     }
 
+    const isLoading = status === Status.Loading;
     return (
-        <form className={styles.Container} onSubmit={onSubmit}>
-            <h2>Enter the link:</h2>
-            <Input
-                type="url"
-                value={url}
-                onChange={e => setUrl(e)}
-                placeholder="https://example.com"
-                className={cn(isLoading && styles.Loading)}
-                required
-                maxLength={300}
-                disabled={isLoading}
-            />
-        </form>
+        <>
+            {status === Status.Success
+                ? <LinkSubmitted/>
+                : <form className={styles.Container} onSubmit={onSubmit}>
+                    <h2>Enter the link:</h2>
+                    <Input
+                        type="url"
+                        value={url}
+                        onChange={e => setUrl(e)}
+                        placeholder="https://example.com"
+                        className={cn(isLoading && styles.Loading)}
+                        required
+                        maxLength={300}
+                        disabled={isLoading}
+                    />
+                </form>}
+        </>
     )
+}
+
+function LinkSubmitted() {
+    return <>
+        <h2>Link submitted</h2>
+        <p className={styles.Prompt}>Confirm transition on the target device.</p>
+    </>;
 }
