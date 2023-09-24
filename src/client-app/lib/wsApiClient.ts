@@ -6,7 +6,7 @@ interface IWsClient {
 }
 
 
-interface IListenMessage {
+export interface IListenMessage {
     url: string,
     state: ConnectionState
 }
@@ -14,10 +14,12 @@ interface IListenMessage {
 const client: IWsClient = {
     listen(token: string, onMessage: (message: IListenMessage) => void): void {
         const wsClient = new WebSocketClient<IListenMessage>(
-            '/ws-api/connect/ws/listen',
+            '/ws-api/connect/listen',
             token,
             onMessage
         );
         wsClient.connect();
     }
 }
+
+export default client;

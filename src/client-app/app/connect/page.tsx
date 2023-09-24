@@ -1,6 +1,7 @@
 import QrCode from "@/app/connect/qr-code";
 import ApiClient from "@/lib/httpApiClient";
 import Center from "@/components/center";
+import ConnectionUiState from "@/app/connect/connection-ui-state";
 
 
 export default async function Connect() {
@@ -8,6 +9,7 @@ export default async function Connect() {
     return (
         <Center>
             <QrCode connectionId={connection_id}/>
+            <ConnectionUiState token={token}/>
         </Center>
     )
 }

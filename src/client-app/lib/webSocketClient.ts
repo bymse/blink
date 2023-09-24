@@ -1,14 +1,18 @@
+import {config} from "@/app/config";
+
 export default class WebSocketClient<T> {
+    private readonly url: string;
     private socket: WebSocket | null = null;
     private reconnectInterval: number = 1000;
     private maxReconnectAttempts: number = 10;
     private currentReconnectAttempts: number = 0;
 
     constructor(
-        private readonly url: string,
+        url: string,
         token: string,
         private readonly onMessage: (message: T) => void) {
-        window.document.cookie = `X-Authorization=${token}};path=${url}`;
+        window.document.cookie = `authorization=${token};path=${url}`;
+        this.url = `${config.wsProtocol}://${location.host}${url}`;
     }
 
     public connect() {

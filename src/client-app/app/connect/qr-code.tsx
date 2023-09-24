@@ -2,6 +2,7 @@ import QRCode from 'qrcode';
 import styles from './qr-code.module.scss';
 import {headers} from 'next/headers'
 import Image from "next/image";
+import {config} from "@/app/config";
 
 export default async function QrCode({connectionId}: { connectionId: string }) {
     const url = getUrl(connectionId);
@@ -19,5 +20,5 @@ export default async function QrCode({connectionId}: { connectionId: string }) {
 
 function getUrl(connectionId: string): string {
     const host = headers().get('host');
-    return new URL(`/connect/submit?connection_id=${connectionId}`, `http://${host}`).href;
+    return new URL(`/connect/submit?connection_id=${connectionId}`, `${config.httpProtocol}://${host}`).href;
 }
