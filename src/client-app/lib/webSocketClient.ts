@@ -32,10 +32,6 @@ export default class WebSocketClient<T> {
                 this.reconnect();
             }
         });
-
-        this.socket.addEventListener('error', (error) => {
-            this.reconnect();
-        });
     }
 
     private reconnect() {
