@@ -62,3 +62,7 @@ class Storage:
 
 def _key(connection_id: str) -> str:
     return f'connection:{connection_id}'
+
+
+def get_storage() -> Storage:
+    return Storage()
