@@ -18,7 +18,7 @@ export default function Form({token}: { token: string }) {
 
     return (
         <form className={styles.Container} onSubmit={onSubmit}>
-            <h2 className={styles.Title}>Enter the link:</h2>
+            <h2>Enter the link:</h2>
             <Input
                 type="url"
                 value={url}

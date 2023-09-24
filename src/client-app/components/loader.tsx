@@ -4,7 +4,7 @@ import Center from "@/components/center";
 export default function Loader({title}: { title: string }) {
     return (
         <Center>
-            <h3 className={styles.Title}>{title}</h3>
+            <h2>{title}</h2>
             <div className={styles.Loader}>
                 <div className={styles.LoaderBullet}></div>
                 <div className={styles.LoaderBullet}></div>

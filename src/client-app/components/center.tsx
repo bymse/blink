@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "./center.module.scss"
 export default function Center({
   children,
