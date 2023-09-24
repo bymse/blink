@@ -15,7 +15,7 @@ redis_pool = create_redis_pool()
 
 
 class Storage:
-    _pubsub: redis.client.PubSub | None
+    _pubsub: redis.client.PubSub | None = None
     _redis: redis.Redis
 
     def __init__(self):
@@ -53,7 +53,7 @@ class Storage:
         await self._pubsub.subscribe(key)
         async for message in self._pubsub.listen():
             if message['type'] == 'message':
-                yield self.find(connection_id)
+                yield await self.find(connection_id)
 
     async def close_listen(self):
         if self._pubsub:
