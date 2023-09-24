@@ -1,6 +1,6 @@
 import QrCode from "@/app/connect/qr-code";
 import ApiClient from "@/app/connect/serverApiClient";
-import Center from "@/app/_components/center";
+import Center from "@/components/center";
 
 
 export default async function Connect() {
