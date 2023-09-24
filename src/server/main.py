@@ -1,6 +1,6 @@
-from typing import Annotated, Tuple
+from typing import Annotated
 
-from fastapi import FastAPI, Depends, Header, HTTPException, Cookie
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.websockets import WebSocketState, WebSocket
 from pydantic import BaseModel, Field
 
@@ -9,7 +9,7 @@ from server.connect.connection import Connection, ConnectionState
 from server.connect.storage import Storage, get_storage
 from server.context import Context
 from server.connect.session import Session, issue_jwt, Role
-from server.context import get_context_from_header, get_context_from_cookie
+from server.context import get_context_from_cookie
 
 app = FastAPI()
 
@@ -36,7 +36,7 @@ async def activate(
         raise HTTPException(status_code=404)
 
     if connection.state != ConnectionState.CREATED and connection.state != ConnectionState.ACTIVATED:
-        raise HTTPException(status_code=400)
+        raise HTTPException(status_code=403)
 
     connection.activate()
     await storage.save(connection)
@@ -76,14 +76,15 @@ class Submit(BaseModel):
 async def submit(
         request: Submit,
         storage: Annotated[Storage, Depends(get_storage)],
-        ctxt: Annotated[Context, Depends(get_context_from_header)]
+        ctxt: Annotated[Context, Depends(get_context_from_cookie)]
 ):
     session, connection = ctxt.session, ctxt.connection
+    err = HTTPException(status_code=403)
     if session.role != Role.SOURCE:
-        raise HTTPException(status_code=403)
+        raise err
 
     if connection.state != ConnectionState.ACTIVATED:
-        raise HTTPException(status_code=400)
+        raise err
 
     connection.submit(request.url)
     await storage.save(connection)

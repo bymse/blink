@@ -29,7 +29,8 @@ const client: IHttpApiClient = {
         return send<ICreateResponse>('/api/connect/create', 'POST');
     },
     submit(token: string, url: string): Promise<void> {
-        return send<void>('/api/connect/submit', 'POST', token, {url});
+        setAuthorizationCookie(token);
+        return send<void>('/api/connect/submit', 'POST', {url});
     },
     complete(token: string) {
         setAuthorizationCookie(token);
@@ -41,21 +42,18 @@ const client: IHttpApiClient = {
     }
 }
 
-async function send<T>(url: string, method: "GET" | "POST", token?: string, body?: any) {
+async function send<T>(url: string, method: "GET" | "POST", body?: any) {
     const absoluteUrl = new URL(url, config.apiHost);
-    const headers = new Headers();
     const init: RequestInit = {
         method,
         cache: 'no-store'
     }
-    if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
-    }
     if (body) {
         init.body = JSON.stringify(body);
-        headers.set('Content-Type', 'application/json');
+        init.headers = {
+            'Content-Type': 'application/json'
+        };
     }
-    init.headers = headers;
     const response = await fetch(absoluteUrl, init);
 
     return await response.json() as T;

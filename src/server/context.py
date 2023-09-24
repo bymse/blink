@@ -1,13 +1,12 @@
-from typing import Annotated, Tuple
-
-from fastapi import Depends, Header, HTTPException, Cookie
-
-from server.connect.storage import get_storage
-
 from dataclasses import dataclass
+from typing import Annotated
+
+from fastapi import Depends, HTTPException, Cookie
+
 from server.connect.connection import Connection
 from server.connect.session import Session, parse_jwt
 from server.connect.storage import Storage
+from server.connect.storage import get_storage
 
 
 @dataclass
@@ -26,14 +25,6 @@ async def _get_context(token: str, storage: Storage) -> Context:
         raise HTTPException(status_code=404)
 
     return Context(connection, ses)
-
-
-async def get_context_from_header(
-        storage: Annotated[Storage, Depends(get_storage)],
-        authorization: Annotated[str, Header()],
-) -> Context:
-    token = authorization.split(" ")[1]
-    return await _get_context(token, storage)
 
 
 async def get_context_from_cookie(
