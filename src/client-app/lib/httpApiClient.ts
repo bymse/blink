@@ -1,4 +1,5 @@
 import {config} from "@/app/config";
+import {setAuthorizationCookie} from "@/lib/authorizationCookie";
 
 interface ITokenResponse {
     token: string,
@@ -12,8 +13,12 @@ interface IHttpApiClient {
     create(): Promise<ICreateResponse>
 
     activate(connection_id: string): Promise<ITokenResponse>,
-    
-    submit(token: string, url: string): Promise<void>
+
+    submit(token: string, url: string): Promise<void>,
+
+    complete(token: string): void,
+
+    decline(token: string): void
 }
 
 const client: IHttpApiClient = {
@@ -25,6 +30,14 @@ const client: IHttpApiClient = {
     },
     submit(token: string, url: string): Promise<void> {
         return send<void>('/api/connect/submit', 'POST', token, {url});
+    },
+    complete(token: string) {
+        setAuthorizationCookie(token);
+        navigator.sendBeacon(`/api/connect/complete`);
+    },
+    decline(token: string) {
+        setAuthorizationCookie(token);
+        navigator.sendBeacon('/api/connect/decline');
     }
 }
 
@@ -44,7 +57,7 @@ async function send<T>(url: string, method: "GET" | "POST", token?: string, body
     }
     init.headers = headers;
     const response = await fetch(absoluteUrl, init);
-    
+
     return await response.json() as T;
 }
 

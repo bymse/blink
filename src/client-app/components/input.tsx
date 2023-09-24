@@ -8,7 +8,8 @@ interface IInputProps {
     disabled?: boolean,
     type: string, 
     required?: boolean,
-    maxLength?: number
+    maxLength?: number,
+    readonly?: boolean,
 }
 
 export default function Input(props: IInputProps) {
@@ -22,6 +23,7 @@ export default function Input(props: IInputProps) {
             required={props.required}
             disabled={props.disabled}
             maxLength={props.maxLength}
+            readOnly={props.readonly}
         />
     )
 }

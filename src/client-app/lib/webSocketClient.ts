@@ -1,4 +1,5 @@
 import {config} from "@/app/config";
+import {setAuthorizationCookie} from "@/lib/authorizationCookie";
 
 export default class WebSocketClient<T> {
     private readonly url: string;
@@ -11,7 +12,7 @@ export default class WebSocketClient<T> {
         url: string,
         token: string,
         private readonly onMessage: (message: T) => void) {
-        window.document.cookie = `authorization=${token};path=${url}`;
+        setAuthorizationCookie(token);
         this.url = `${config.wsProtocol}://${location.host}${url}`;
     }
 
