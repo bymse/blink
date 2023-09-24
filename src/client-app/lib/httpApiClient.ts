@@ -8,7 +8,7 @@ interface ICreateResponse extends ITokenResponse {
     connection_id: string
 }
 
-interface IServerApiClient {
+interface IHttpApiClient {
     create(): Promise<ICreateResponse>
 
     activate(connection_id: string): Promise<ITokenResponse>,
@@ -16,7 +16,7 @@ interface IServerApiClient {
     submit(token: string, url: string): Promise<void>
 }
 
-const client: IServerApiClient = {
+const client: IHttpApiClient = {
     activate(connection_id: string): Promise<ITokenResponse> {
         return send<ITokenResponse>(`/api/connect/activate?connection_id=${connection_id}`, 'POST');
     },
@@ -33,6 +33,7 @@ async function send<T>(url: string, method: "GET" | "POST", token?: string, body
     const headers = new Headers();
     const init: RequestInit = {
         method,
+        cache: 'no-store'
     }
     if (token) {
         headers.set('Authorization', `Bearer ${token}`);

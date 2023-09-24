@@ -2,7 +2,7 @@
 import {FormEventHandler, useState} from "react";
 import styles from "./form.module.scss";
 import cn from "classnames"
-import ServerApiClient from "@/app/connect/serverApiClient";
+import ApiClient from "@/lib/httpApiClient";
 
 export default function Form({token}: { token: string }) {
     const [url, setUrl] = useState("");
@@ -10,7 +10,7 @@ export default function Form({token}: { token: string }) {
     const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
         setIsLoading(true);
         event.preventDefault();
-        ServerApiClient
+        ApiClient
             .submit(token, url)
             .finally(() => setIsLoading(false));
     }

@@ -1,6 +1,6 @@
 import {redirect} from "next/navigation";
 import RemoveQuery from "@/app/connect/submit/remove-query";
-import ApiClient from "@/app/connect/serverApiClient";
+import ApiClient from "@/lib/httpApiClient";
 import React from "react";
 import Center from "@/components/center";
 import Form from "@/app/connect/submit/form";
