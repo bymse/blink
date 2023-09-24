@@ -3,6 +3,7 @@ import {FormEventHandler, useState} from "react";
 import styles from "./form.module.scss";
 import cn from "classnames"
 import ApiClient from "@/lib/httpApiClient";
+import Input from "@/components/input";
 
 export default function Form({token}: { token: string }) {
     const [url, setUrl] = useState("");
@@ -18,12 +19,12 @@ export default function Form({token}: { token: string }) {
     return (
         <form className={styles.Container} onSubmit={onSubmit}>
             <h2 className={styles.Title}>Enter the link:</h2>
-            <input
+            <Input
                 type="url"
                 value={url}
-                onChange={e => setUrl(e.target.value)}
+                onChange={e => setUrl(e)}
                 placeholder="https://example.com"
-                className={cn(styles.Input, isLoading && styles.Loading)}
+                className={cn(isLoading && styles.Loading)}
                 required
                 maxLength={300}
                 disabled={isLoading}
