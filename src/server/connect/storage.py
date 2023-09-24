@@ -25,7 +25,7 @@ class Storage:
         key = _key(connection.connection_id)
         await self._redis.hset(key, mapping={
             'state': int(connection.state),
-            'url': str(connection.url)
+            'url': connection.url or ''
         })
 
         if connection.state == ConnectionState.CREATED:
@@ -44,7 +44,7 @@ class Storage:
             connection_id=connection_id,
             ttl_seconds=expires,
             state=ConnectionState(int(connection[b'state'])),
-            url=str(connection[b'url'])
+            url=str(connection[b'url'], 'utf-8')
         )
 
     async def listen(self, connection_id: str) -> AsyncIterator[Connection]:
