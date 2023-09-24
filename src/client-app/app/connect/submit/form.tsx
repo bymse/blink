@@ -33,17 +33,18 @@ export default function Form({token}: { token: string }) {
             {status === Status.Success
                 ? <LinkSubmitted/>
                 : <form className={styles.Container} onSubmit={onSubmit}>
-                    <h2>Enter the link:</h2>
+                    <h2>Enter the link</h2>
                     <Input
                         type="url"
                         value={url}
                         onChange={e => setUrl(e)}
                         placeholder="https://example.com"
-                        className={cn(isLoading && styles.Loading)}
+                        className={cn(styles.Input, isLoading && styles.Loading)}
                         required
                         maxLength={300}
                         disabled={isLoading}
                     />
+                    {status === Status.Error && <span className={styles.Error}>Error occurred. Reload page and retry</span>}
                 </form>}
         </>
     )

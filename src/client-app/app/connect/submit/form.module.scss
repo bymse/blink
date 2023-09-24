@@ -2,25 +2,35 @@
 .Container {
     display: flex;
     flex-direction: column;
-    gap: 1.6rem;
     align-items: center;
     width: 100%;
+}
+
+.Input {
+    margin-top: 1rem;
 }
 
 .Prompt {
     font-size: 1.2em;
 }
 
-input.Loading {
+.Error {
+    color: red;
+    font-size: 0.8em;
+    margin-top: 0.4rem;
+}
+
+
+.Input.Loading {
     //noinspection CssInvalidFunction
     background: linear-gradient(
                     to right,
                     #acacac 0% 45%,
                     #fff 50%,
                     #acacac 55% 100%);
-    
+
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent; 
+    -webkit-text-fill-color: transparent;
     background-size: 200% 100%;
     animation: loading-animation 2s linear infinite;
 }

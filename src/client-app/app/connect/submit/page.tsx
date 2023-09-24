@@ -1,5 +1,4 @@
 import {redirect} from "next/navigation";
-import RemoveQuery from "@/app/connect/submit/remove-query";
 import ApiClient from "@/lib/httpApiClient";
 import React from "react";
 import Center from "@/components/center";
@@ -15,7 +14,6 @@ export default async function Submit({searchParams}: { searchParams: { connectio
             {token
                 ? <Form token={token}/>
                 : <Invalid/>}
-            <RemoveQuery/>
         </Center>
     )
 }

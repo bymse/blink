@@ -55,6 +55,9 @@ async function send<T>(url: string, method: "GET" | "POST", body?: any) {
         };
     }
     const response = await fetch(absoluteUrl, init);
+    if (response.status >= 400) {
+        throw new Error(response.status.toString());
+    }
 
     return await response.json() as T;
 }
