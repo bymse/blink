@@ -31,6 +31,10 @@ h2 {
   font-weight: normal;
 }
 
+p {
+  font-size: 1.1em;
+}
+
 main {
   flex: 1;
 }

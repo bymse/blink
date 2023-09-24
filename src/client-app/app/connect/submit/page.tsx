@@ -12,8 +12,17 @@ export default async function Submit({searchParams}: { searchParams: { connectio
     const {token} = await ApiClient.activate(searchParams.connection_id);
     return (
         <Center>
-            <Form token={token}/>
+            {token
+                ? <Form token={token}/>
+                : <Invalid/>}
             <RemoveQuery/>
         </Center>
     )
+}
+
+function Invalid() {
+    return <>
+        <h2>Page is invalid</h2>
+        <p>Reload the page to get new QR code</p>
+    </>
 }
