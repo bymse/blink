@@ -89,3 +89,41 @@ async def submit(
     await storage.save(connection)
 
     return {}
+
+
+@app.post('/api/connect/complete')
+async def complete(
+        storage: Annotated[Storage, Depends(get_storage)],
+        ctxt: Annotated[Context, Depends(get_context_from_cookie)]
+):
+    session, connection = ctxt.session, ctxt.connection
+    err = HTTPException(status_code=403)
+    if session.role != Role.TARGET:
+        raise err
+
+    if connection.state != ConnectionState.SUBMITTED:
+        raise err
+
+    connection.complete()
+    await storage.save(connection)
+
+    return {}
+
+
+@app.post('/api/connect/decline')
+async def decline(
+        storage: Annotated[Storage, Depends(get_storage)],
+        ctxt: Annotated[Context, Depends(get_context_from_cookie)]
+):
+    session, connection = ctxt.session, ctxt.connection
+    err = HTTPException(status_code=403)
+    if session.role != Role.TARGET:
+        raise err
+
+    if connection.state != ConnectionState.SUBMITTED:
+        raise err
+
+    connection.decline()
+    await storage.save(connection)
+
+    return {}

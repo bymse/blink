@@ -3,7 +3,7 @@ enum ConnectionState {
     ACTIVATED = 2,
     SUBMITTED = 3,
     COMPLETED = 4,
-    EXPIRED = 5,
+    DECLINED = 5,
 }
 
 export default ConnectionState; 

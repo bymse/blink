@@ -8,7 +8,7 @@ class ConnectionState(IntEnum):
     ACTIVATED = 2
     SUBMITTED = 3
     COMPLETED = 4
-    EXPIRED = 5
+    DECLINED = 5,
 
 
 class Connection:
@@ -37,6 +37,9 @@ class Connection:
     def submit(self, url: str):
         self.state = ConnectionState.SUBMITTED
         self.url = url
+
+    def decline(self):
+        self.state = ConnectionState.DECLINED
 
     def complete(self):
         self.state = ConnectionState.COMPLETED
