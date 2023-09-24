@@ -1,49 +1,27 @@
 from typing import Annotated, Tuple
 
-from fastapi import FastAPI, Depends, Header, HTTPException
+from fastapi import FastAPI, Depends, Header, HTTPException, Cookie
 from fastapi.websockets import WebSocketState, WebSocket
 from pydantic import BaseModel, Field
 
 from server.config import config
 from server.connect.connection import Connection, ConnectionState
-from server.connect.storage import Storage
-import server.connect.session as session
+from server.connect.storage import Storage, get_storage
+from server.context import Context
+from server.connect.session import Session, issue_jwt, Role
+from server.context import get_context_from_header, get_context_from_cookie
 
 app = FastAPI()
 
 
-def get_storage():
-    return Storage()
-
-
-async def get_context(
-        storage: Annotated[Storage, Depends(get_storage)],
-        authorization: Annotated[str | None, Header()] = None,
-):
-    error = HTTPException(status_code=401)
-    if not authorization:
-        raise error
-
-    token = authorization.split(" ")[1]
-    ses = session.parse_jwt(token)
-    if not ses:
-        raise error
-
-    connection = await storage.find(ses.connection_id)
-    if not connection:
-        raise HTTPException(status_code=404)
-
-    return ses, connection
-
-
 @app.post("/api/connect/create")
-def create(storage: Annotated[Storage, Depends(get_storage)]):
+async def create(storage: Annotated[Storage, Depends(get_storage)]):
     connection = Connection.create(config.connection_ttl_seconds)
-    storage.save(connection)
+    await storage.save(connection)
 
-    ses = session.Session(connection_id=connection.connection_id, role=session.Role.TARGET)
+    ses = Session(connection_id=connection.connection_id, role=Role.TARGET)
     return {
-        "token": session.issue_jwt(ses, connection.ttl_seconds),
+        "token": issue_jwt(ses, connection.ttl_seconds),
         "connection_id": connection.connection_id
     }
 
@@ -63,18 +41,18 @@ async def activate(
     connection.activate()
     await storage.save(connection)
 
-    ses = session.Session(connection_id=connection_id, role=session.Role.SOURCE)
+    ses = Session(connection_id=connection_id, role=Role.SOURCE)
     return {
-        "token": session.issue_jwt(ses, connection.ttl_seconds)
+        "token": issue_jwt(ses, connection.ttl_seconds)
     }
 
 
 @app.websocket("/ws-api/connect/listen")
 async def listen(websocket: WebSocket,
-                 context: Annotated[Tuple[session.Session, Connection], Depends(get_context)],
+                 ctxt: Annotated[Context, Depends(get_context_from_cookie)],
                  storage: Annotated[Storage, Depends(get_storage)]):
-    ses, connection = context
-    if ses.role != session.Role.TARGET:
+    session, connection = ctxt.session, ctxt.connection
+    if session.role != Role.TARGET:
         raise HTTPException(status_code=403)
 
     await websocket.accept()
@@ -98,10 +76,10 @@ class Submit(BaseModel):
 async def submit(
         request: Submit,
         storage: Annotated[Storage, Depends(get_storage)],
-        context: Annotated[Tuple[session.Session, Connection], Depends(get_context)]
+        ctxt: Annotated[Context, Depends(get_context_from_header)]
 ):
-    ses, connection = context
-    if ses.role != session.Role.SOURCE:
+    session, connection = ctxt.session, ctxt.connection
+    if session.role != Role.SOURCE:
         raise HTTPException(status_code=403)
 
     if connection.state != ConnectionState.ACTIVATED:
