@@ -8,8 +8,9 @@ export default async function Connect() {
     const {token, connection_id} = await ApiClient.create();
     return (
         <Center>
-            <QrCode connectionId={connection_id}/>
-            <ConnectionUiState token={token}/>
+            <ConnectionUiState token={token}>
+                <QrCode connectionId={connection_id}/>
+            </ConnectionUiState>
         </Center>
     )
 }
