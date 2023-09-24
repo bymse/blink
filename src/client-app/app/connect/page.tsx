@@ -7,7 +7,6 @@ export default async function Connect() {
     const {token, connection_id} = await ApiClient.create();
     return (
         <Center>
-            <h3>Scan me:</h3>
             <QrCode connectionId={connection_id}/>
         </Center>
     )
