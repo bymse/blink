@@ -21,5 +21,5 @@ export default async function QrCode({connectionId}: { connectionId: string }) {
 
 function getUrl(connectionId: string): string {
     const host = headers().get('host');
-    return new URL(`/connect/submit?connection_id=${connectionId}`, `${config.httpProtocol}://${host}`).href;
+    return new URL(`/connect/submit?connection_id=${connectionId}`, config.publicHost).href;
 }
