@@ -3,7 +3,7 @@ import styles from './qr-code.module.scss';
 import {headers} from 'next/headers'
 import Image from "next/image";
 import {config} from "@/app/config";
-import Center from "@/components/center";
+import Center from "@/components/center/center";
 
 export default async function QrCode({connectionId}: { connectionId: string }) {
     const url = getUrl(connectionId);

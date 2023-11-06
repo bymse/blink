@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from "react";
 import ConnectionState from "@/lib/connectionState";
 import WsApiClient, {IListenMessage} from "@/lib/wsApiClient";
-import Loader from "@/components/loader";
+import Loader from "@/components/loader/loader";
 import LinkPrompt from "@/app/connect/link-prompt";
 
 export default function ConnectionUiState({token, children}: { token: string, children: React.ReactNode }) {

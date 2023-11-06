@@ -1,5 +1,5 @@
 import styles from "./loader.module.scss"
-import Center from "@/components/center";
+import Center from "@/components/center/center";
 
 export default function Loader({title}: { title: string }) {
     return (

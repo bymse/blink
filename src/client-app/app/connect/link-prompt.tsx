@@ -1,10 +1,10 @@
 "use client";
-import Center from "@/components/center";
+import Center from "@/components/center/center";
 import styles from "./link-prompt.module.scss";
-import Button from "@/components/button";
+import Button from "@/components/button/button";
 import HttpApiClient from "@/lib/httpApiClient";
 import {useState} from "react";
-import Input from "@/components/input";
+import Input from "@/components/input/input";
 
 enum Status {
     Initial,

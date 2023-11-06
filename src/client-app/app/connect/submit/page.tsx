@@ -1,7 +1,7 @@
 import {redirect} from "next/navigation";
 import ApiClient from "@/lib/httpApiClient";
 import React from "react";
-import Center from "@/components/center";
+import Center from "@/components/center/center";
 import Form from "@/app/connect/submit/form";
 import Invalid from "@/app/connect/submit/invalid";
 

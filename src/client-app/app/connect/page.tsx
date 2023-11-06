@@ -1,6 +1,6 @@
 import QrCode from "@/app/connect/qr-code";
 import ApiClient from "@/lib/httpApiClient";
-import Center from "@/components/center";
+import Center from "@/components/center/center";
 import ConnectionUiState from "@/app/connect/connection-ui-state";
 
 

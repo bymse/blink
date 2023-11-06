@@ -3,7 +3,7 @@ import {FormEventHandler, useState} from "react";
 import styles from "./form.module.scss";
 import cn from "classnames"
 import ApiClient from "@/lib/httpApiClient";
-import Input from "@/components/input";
+import Input from "@/components/input/input";
 
 enum Status {
     Idle,
