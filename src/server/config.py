@@ -22,6 +22,10 @@ class Config:
         return int(self._get('connection', 'ttl_seconds'))
 
     @property
+    def allowed_origin(self) -> str:
+        return self._get('requests', 'origin')
+
+    @property
     def rsa_private_key(self) -> str:
         if self._rsa_private_key is not None:
             return self._rsa_private_key

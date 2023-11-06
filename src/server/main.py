@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.websockets import WebSocketState, WebSocket
 from pydantic import BaseModel, Field
 
@@ -12,6 +12,19 @@ from server.connect.session import Session, issue_jwt, Role
 from server.context import get_context_from_cookie
 
 app = FastAPI()
+
+
+def verify_origin(origin: str):
+    if origin and origin != config.allowed_origin:
+        raise HTTPException(status_code=403)
+
+
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    origin = request.headers.get('origin')
+    verify_origin(origin)
+
+    return await call_next(request)
 
 
 @app.post("/api/connect/create")
@@ -50,7 +63,10 @@ async def activate(
 @app.websocket("/ws-api/connect/listen")
 async def listen(websocket: WebSocket,
                  ctxt: Annotated[Context, Depends(get_context_from_cookie)],
-                 storage: Annotated[Storage, Depends(get_storage)]):
+                 storage: Annotated[Storage, Depends(get_storage)],
+                 origin: Annotated[str, Header()]):
+    verify_origin(origin)
+
     session, connection = ctxt.session, ctxt.connection
     if session.role != Role.TARGET:
         raise HTTPException(status_code=403)
