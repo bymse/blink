@@ -4,12 +4,12 @@ from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.websockets import WebSocketState, WebSocket
 from pydantic import BaseModel, Field
 
-from server.config import config
-from server.connect.connection import Connection, ConnectionState
-from server.connect.storage import Storage, get_storage
-from server.context import Context
-from server.connect.session import Session, issue_jwt, Role
-from server.context import get_context_from_cookie
+from config import config
+from connect.connection import Connection, ConnectionState
+from connect.storage import Storage, get_storage
+from context import Context
+from connect.session import Session, issue_jwt, Role
+from context import get_context_from_cookie
 
 app = FastAPI()
 

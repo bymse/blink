@@ -4,7 +4,7 @@ import time
 from dataclasses import dataclass
 import enum
 import jwt
-from server.config import config
+from config import config
 
 
 class Role(enum.IntEnum):

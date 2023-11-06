@@ -2,9 +2,9 @@ from collections.abc import AsyncIterator
 
 import redis.asyncio as redis
 
-from server.config import config
+from config import config
 
-from server.connect.connection import Connection, ConnectionState
+from connect.connection import Connection, ConnectionState
 
 
 def create_redis_pool():

@@ -3,10 +3,10 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException, Cookie
 
-from server.connect.connection import Connection
-from server.connect.session import Session, parse_jwt
-from server.connect.storage import Storage
-from server.connect.storage import get_storage
+from connect.connection import Connection
+from connect.session import Session, parse_jwt
+from connect.storage import Storage
+from connect.storage import get_storage
 
 
 @dataclass
