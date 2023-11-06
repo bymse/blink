@@ -3,6 +3,7 @@ import ApiClient from "@/lib/httpApiClient";
 import Center from "@/components/center/center";
 import ConnectionUiState from "@/app/connect/connection-ui-state";
 
+export const dynamic = 'force-dynamic'
 
 export default async function Connect() {
     const {token, connection_id} = await ApiClient.create().catch(() => ({token: null, connection_id: null}));

@@ -5,6 +5,8 @@ import Center from "@/components/center/center";
 import Form from "@/app/connect/submit/form";
 import Invalid from "@/app/connect/submit/invalid";
 
+export const dynamic = 'force-dynamic'
+
 export default async function Submit({searchParams}: { searchParams: { connection_id: string } }) {
     if (!searchParams.connection_id) {
         redirect("/");
