@@ -1,6 +1,7 @@
 .Qr {
     border: 1px solid black;
     display: flex;
+    align-self: center;
     
     &, & img {
         border-radius: 6%;

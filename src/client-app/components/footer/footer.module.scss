@@ -7,10 +7,17 @@
 
 .github {
     position: fixed;
-    bottom: 1rem;
-    right: 1rem;
+    bottom: 2rem;
+    right: 2rem;
     border-radius: 50%;
     width: 2.5rem;
     height: 2.5rem;
     cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+    .github {
+        bottom: 1rem;
+        right: 1rem;
+    }
 }

@@ -1,13 +1,23 @@
 .center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-rows: 20% [center] 1fr auto;
+  grid-template-columns: 100%;
   height: 100%;
-  gap: 1rem;
   
   @media only screen and (max-width: 768px) {
-    justify-content: flex-start;
-    padding: 40% .4em 0;
+    //justify-content: flex-start;
+    //padding: 40% .4em 0;
   }
+}
+
+.items {
+  grid-row: center / 2;
+  place-self: center;
+  align-self: start;
+  
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
 }
