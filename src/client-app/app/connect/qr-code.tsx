@@ -11,7 +11,7 @@ export default async function QrCode({connectionId}: { connectionId: string }) {
 
     return (
         <Center>
-            <h2>Scan me:</h2>
+            <h2>Scan me</h2>
             <div className={styles.Qr}>
                 <Image src={dataUrl} alt={url} width={300} height={300}/>
             </div>

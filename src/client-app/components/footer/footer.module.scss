@@ -6,7 +6,9 @@
 }
 
 .github {
-    margin: 0 2rem 2rem auto;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
     border-radius: 50%;
     width: 2.5rem;
     height: 2.5rem;
