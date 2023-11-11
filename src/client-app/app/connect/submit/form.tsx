@@ -4,6 +4,7 @@ import styles from "./form.module.scss";
 import cn from "classnames"
 import ApiClient from "@/lib/httpApiClient";
 import Input from "@/components/input/input";
+import Button from "@/components/button/button";
 
 enum Status {
     Idle,
@@ -44,6 +45,7 @@ export default function Form({token}: { token: string }) {
                         maxLength={300}
                         disabled={isLoading}
                     />
+                    <Button mode="primary" type="submit">Submit</Button>
                     {status === Status.Error && <span className={styles.Error}>Error occurred. Reload page and retry</span>}
                 </form>}
         </>
